@@ -23,6 +23,7 @@
 <body>
     <div class="container">
         <h1 id="ability-name">Loading...</h1>
+        <button class="btn btn-primary mb-2" onclick="goBack()">Back</button>
         <div id="ability-details" class="row"></div>
     </div>
     <script>
@@ -50,7 +51,9 @@
                             ele.innerHTML += `
                                 <div class='col-3'>
                                     <div class='card'>
-                                        <img class='card-img-top' src='${imageUrl}'>
+                                        <a href="details.html?name=${pokemon.name}">
+                                            <img class='card-img-top' src='${imageUrl}'>
+                                        </a>
                                         <div class='card-body text-center'>
                                             <a href="details.html?name=${pokemon.name}">${pokemon.name}</a>
                                         </div>
@@ -64,6 +67,9 @@
                 document.getElementById('ability-name').textContent = 'Ability not found';
             }
         });
+        function goBack() {
+            window.history.back();
+        }
     </script>
     <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
