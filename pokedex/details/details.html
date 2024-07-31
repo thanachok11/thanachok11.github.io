@@ -11,16 +11,74 @@
         crossorigin="anonymous"
     />
     <style>
+        body {
+            background-color: #f0f8ff;
+        }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            color: #ff6347;
+            text-shadow: 2px 2px #ffe4b5;
+        }
         .card {
             margin-bottom: 1rem;
+            transition: transform 0.3s ease-in-out;
+            border: 2px solid #ff6347;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        
+        .card-img-top {
+            width: 100%;
+            height: auto;
+            image-rendering: auto;
+            image-rendering: crisp-edges;
+            image-rendering: pixelated;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+        .card-body {
+            background-color: #ffebcd;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+            text-decoration: none; 
+        }
+        .card-body h5 {
+            color: #ff6347;
+        }
+        .card-text a {
+            text-decoration: none;
+            color: #ff6347;
+        }
+        .load-more-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .load-more-container button {
+            background-color: #ff6347;
+            border-color: #ff6347;
+            color: #fff;
+        }
+        .load-more-container button:hover {
+            background-color: #ffa07a;
+            border-color: #ffa07a;
+        }
+        .btn-custom {
+            background-color: #ff6347;
+            border-color: #ff6347;
+            color: #fff;
+        }
+        .btn-custom:hover {
+            background-color: #ffa07a;
+            border-color: #ffa07a;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1 id="pokemon-name">Loading...</h1>
-        <div id="pokemon-details" class="row"></div>
+        <div id="pokemon-details" class="row justify-content-center"></div>
     </div>
     <script>
         // Function to get query parameters
@@ -39,10 +97,13 @@
                     .then((pokemon) => {
                         document.getElementById('pokemon-name').textContent = pokemon.name;
 
+                        const id = pokemon.id;
+                        const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
+
                         const details = `
                             <div class="col-5">
-                                <div class="card">
-                                    <img src="${pokemon.sprites.front_default}" class="card-img-top" alt="${pokemon.name}">
+                                <div class="card mx-auto">
+                                    <img src="${imageUrl}" class="card-img-top" alt="${pokemon.name}">
                                     <div class="card-body">
                                         <h5 class="card-title">${pokemon.name}</h5>
                                         <p class="card-text">Height: ${pokemon.height}</p>
@@ -51,7 +112,7 @@
                                         <p class="card-text">Stats: ${pokemon.stats.map(s => `${s.stat.name}: ${s.base_stat}`).join(', ')}</p>
                                         <p class="card-text">Types: ${pokemon.types.map(t => `<a href="type.html?type=${t.type.name}">${t.type.name}</a>`).join(', ')}</p>
                                         <p class="card-text">Abilities: ${pokemon.abilities.map(a => `<a href="ability.html?ability=${a.ability.name}">${a.ability.name}</a>`).join(', ')}</p>
-                                        <button onclick="goBack()" class="btn btn-primary">Back</button>
+                                        <button onclick="goBack()" class="btn btn-custom">Back</button>
                                     </div>
                                 </div>
                             </div>

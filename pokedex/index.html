@@ -11,16 +11,57 @@
         crossorigin="anonymous"
     />
     <style>
-         .card {
+        body {
+            background-color: #f0f8ff;
+        }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            color: #ff6347;
+            text-shadow: 2px 2px #ffe4b5;
+        }
+        .card {
             margin-bottom: 1rem;
             transition: transform 0.3s ease-in-out;
+            border: 2px solid #ff6347;
+            border-radius: 15px;
         }
         .card:hover {
             transform: scale(1.05);
+            border-color: #ffa07a;
+        }
+        .card-img-top {
+            width: 100%;
+            height: auto;
+            image-rendering: auto;
+            image-rendering: crisp-edges;
+            image-rendering: pixelated;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+        
+        .card-body {
+            background-color: #ffebcd;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+            text-align: center; /* Center align text */
+            text-decoration: none; 
+        }
+        .card-body h5 {
+            color: #ff6347;
         }
         .load-more-container {
             text-align: center;
             margin-top: 20px;
+        }
+        .load-more-container button {
+            background-color: #ff6347;
+            border-color: #ff6347;
+            color: #fff;
+        }
+        .load-more-container button:hover {
+            background-color: #ffa07a;
+            border-color: #ffa07a;
         }
     </style>
 </head>
@@ -44,15 +85,18 @@
                 const ele = document.getElementById("name");
                 datas.forEach((element) => {
                     const id = element.url.split('/').filter(Boolean).pop(); // Extract the Pokémon ID from the URL
-                    const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+                    const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
                     ele.innerHTML +=
-                     "<div class='col-3'>" +
-                     "<a href='/pokedex/details/details.html?name=" + element.name + "'>" +
-                     "<div class='card'>" + 
-                     "<img class='card-img-top' src='" + imageUrl + "'>" +   
-                     "<div class='card-body text-center'>" 
-                     + element.name + 
-                     "</div></div></a></div>";
+                 `<div class='col-3'>
+                     <a href='/pokedex/details/details.html?name=${element.name}' class='text-decoration-none'>
+                         <div class='card'>
+                             <img class='card-img-top' src='${imageUrl}'>
+                             <div class='card-body'>
+                                 ${element.name}
+                             </div>
+                         </div>
+                     </a>
+                 </div>`;
                 });
                 offset += limit;
             })

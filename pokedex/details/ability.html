@@ -11,19 +11,62 @@
         crossorigin="anonymous"
     />
     <style>
+        body {
+            background-color: #f0f8ff;
+        }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            color: #ff6347;
+            text-shadow: 2px 2px #ffe4b5;
+        }
         .card {
             margin-bottom: 1rem;
             transition: transform 0.3s ease-in-out;
+            border: 2px solid #ff6347;
+            border-radius: 15px;
         }
         .card:hover {
             transform: scale(1.05);
+            border-color: #ffa07a;
+        }
+        .card-img-top {
+            width: 100%;
+            height: auto;
+            image-rendering: auto;
+            image-rendering: crisp-edges;
+            image-rendering: pixelated;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+        .card-body {
+            background-color: #ffebcd;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+        }
+        .card-body h5 {
+            color: #ff6347;
+        }
+        .btn-custom {
+            background-color: #ff6347;
+            border-color: #ff6347;
+            color: #fff;
+            margin: 10px;
+        }
+        .btn-custom:hover {
+            background-color: #ffa07a;
+            border-color: #ffa07a;
+        }
+        .card-body a {
+            text-decoration: none; /* Remove underline */
+            color: black; /* Set link color to black */
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1 id="ability-name">Loading...</h1>
-        <button class="btn btn-primary mb-2" onclick="goBack()">Back</button>
+        <button onclick="goBack()" class="btn btn-custom">Back</button>
         <div id="ability-details" class="row"></div>
     </div>
     <script>
@@ -47,7 +90,7 @@
                         pokemonList.forEach((p) => {
                             const pokemon = p.pokemon;
                             const id = pokemon.url.split('/').filter(Boolean).pop();
-                            const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+                            const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
                             ele.innerHTML += `
                                 <div class='col-3'>
                                     <div class='card'>
@@ -55,7 +98,7 @@
                                             <img class='card-img-top' src='${imageUrl}'>
                                         </a>
                                         <div class='card-body text-center'>
-                                            <a href="details.html?name=${pokemon.name}">${pokemon.name}</a>
+                                            <a href="details.html?name=${pokemon.name}" class="text-decoration-none">${pokemon.name}</a>
                                         </div>
                                     </div>
                                 </div>
