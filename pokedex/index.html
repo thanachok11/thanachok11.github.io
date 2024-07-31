@@ -11,62 +11,63 @@
         crossorigin="anonymous"
     />
     <style>
-        .card {
+         .card {
             margin-bottom: 1rem;
             transition: transform 0.3s ease-in-out;
         }
         .card:hover {
             transform: scale(1.05);
         }
+        .load-more-container {
+            text-align: center;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Pokedex Lab</h1>
-        <div id="pokemonList" class="row"></div>
+        <div id="name" class="row"></div>
+        <div class="load-more-container">
+            <button id="load-more" class="btn btn-primary">Load More</button>
+        </div>
     </div>
-
     <script>
-        fetch("https://pokeapi.co/api/v2/pokemon")
-        .then((res) => res.json())
-        .then((data) => {
-            const pokemons = data.results;
-            const pokemonList = pokemons.map((pokemon) => {
-                return fetch(pokemon.url)
-                    .then((res) => res.json());
-            });
+        let offset = 0;
+        const limit = 20;
 
-            Promise.all(pokemonList)
-            .then((pokemonData) => {
-                const pokemonContainer = document.getElementById("pokemonList");
-                pokemonData.forEach((pokemon) => {
-                    const id = pokemon.id;
+        function loadPokemons() {
+            fetch(`https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`)
+            .then((res) => res.json())
+            .then((data) => {
+                const datas = data["results"];
+                const ele = document.getElementById("name");
+                datas.forEach((element) => {
+                    const id = element.url.split('/').filter(Boolean).pop(); // Extract the Pokémon ID from the URL
                     const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
-                    
-                    const card = document.createElement("div");
-                    card.classList.add("col-3", "mb-3");
-                    card.innerHTML = `
-                        <a href="/pokedex/details/details.html?name=${pokemon.name}">
-                            <div class="card">
-                                <img src="${imageUrl}" class="card-img-top" alt="${pokemon.name}">
-                                <div class="card-body text-center">
-                                    <h5 class="card-title">${pokemon.name}</h5>
-                                </div>
-                            </div>
-                        </a>
-                    `;
-                    pokemonContainer.appendChild(card);
+                    ele.innerHTML +=
+                     "<div class='col-3'>" +
+                     "<a href='/pokedex/details/details.html?name=" + element.name + "'>" +
+                     "<div class='card'>" + 
+                     "<img class='card-img-top' src='" + imageUrl + "'>" +   
+                     "<div class='card-body text-center'>" 
+                     + element.name + 
+                     "</div></div></a></div>";
                 });
+                offset += limit;
             })
             .catch((err) => console.error(err));
-        })
-        .catch((err) => console.error(err));
-    </script>
+        }
 
+        document.getElementById('load-more').addEventListener('click', loadPokemons);
+
+        // Load the initial set of Pokémon when the page loads
+        document.addEventListener('DOMContentLoaded', loadPokemons);
+    </script>
     <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"
-    ></script>
+    ></script>    
 </body>
 </html>
