@@ -14,9 +14,6 @@
         body {
             background-color: #f0f8ff;
         }
-        .card {
-            columns: black;
-        }
         h1 {
             text-align: center;
             margin: 20px 0;
@@ -67,10 +64,12 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container py-3">
         <h1 id="type-name">Loading...</h1>
-        <button onclick="goBack()" class="btn btn-custom">Back</button>
-        <div id="type-details" class="row"></div>
+        <div class="text-center">
+            <button onclick="goBack()" class="btn btn-custom">Back</button>
+        </div>
+        <div id="type-details" class="row justify-content-center"></div>
     </div>
     <script>
         function getQueryParams() {
@@ -95,17 +94,16 @@
                             const id = pokemon.url.split('/').filter(Boolean).pop();
                             const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
                             ele.innerHTML += `
-                            <div class="col-3">
-                            <a href="details.html?name=${pokemon.name}" class="text-decoration-none">
-                                <div class="card">
-                                    <img class="card-img-top" src="${imageUrl}" alt="${pokemon.name}">
-                                    <div class="card-body text-center c-black">
-                                        <a href="details.html?name=${pokemon.name}" class="text-decoration-none">${pokemon.name}</a>
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+                                <a href="details.html?name=${pokemon.name}" class="text-decoration-none">
+                                    <div class="card mx-auto">
+                                        <img class="card-img-top" src="${imageUrl}" alt="${pokemon.name}">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title">${pokemon.name}</h5>
+                                        </div>
                                     </div>
-                                </div>
-                         </a>
-                        </div>
-
+                                </a>
+                            </div>
                             `;
                         });
                     })
@@ -114,6 +112,7 @@
                 document.getElementById('type-name').textContent = 'Type not found';
             }
         });
+
         function goBack() {
             window.history.back();
         }

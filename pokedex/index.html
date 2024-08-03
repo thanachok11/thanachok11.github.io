@@ -39,7 +39,6 @@
             border-top-left-radius: 15px;
             border-top-right-radius: 15px;
         }
-        
         .card-body {
             background-color: #ffebcd;
             border-bottom-left-radius: 15px;
@@ -66,7 +65,7 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container py-3">
         <h1>Pokedex Lab</h1>
         <div id="name" class="row"></div>
         <div class="load-more-container">
@@ -87,7 +86,7 @@
                     const id = element.url.split('/').filter(Boolean).pop(); // Extract the Pokémon ID from the URL
                     const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
                     ele.innerHTML +=
-                 `<div class='col-3'>
+                 `<div class='col-6 col-sm-6 col-md-4 col-lg-3'>
                      <a href='/pokedex/details/details.html?name=${element.name}' class='text-decoration-none'>
                          <div class='card'>
                              <img class='card-img-top' src='${imageUrl}'>

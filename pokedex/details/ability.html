@@ -43,6 +43,7 @@
             background-color: #ffebcd;
             border-bottom-left-radius: 15px;
             border-bottom-right-radius: 15px;
+            text-align: center;
         }
         .card-body h5 {
             color: #ff6347;
@@ -64,7 +65,7 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container py-3">
         <h1 id="ability-name">Loading...</h1>
         <button onclick="goBack()" class="btn btn-custom">Back</button>
         <div id="ability-details" class="row"></div>
@@ -92,7 +93,7 @@
                             const id = pokemon.url.split('/').filter(Boolean).pop();
                             const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
                             ele.innerHTML += `
-                                <div class='col-3'>
+                                <div class='col-6 col-sm-6 col-md-4 col-lg-3'>
                                     <div class='card'>
                                         <a href="details.html?name=${pokemon.name}">
                                             <img class='card-img-top' src='${imageUrl}'>
@@ -110,6 +111,7 @@
                 document.getElementById('ability-name').textContent = 'Ability not found';
             }
         });
+
         function goBack() {
             window.history.back();
         }
