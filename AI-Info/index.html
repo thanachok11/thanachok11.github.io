@@ -190,7 +190,7 @@
                 'ภาคเหนือ': [17.8, 18.1, 18.3, 18],
                 'ภาคตะวันออกเฉียงเหนือ': [17.3, 17.7, 18, 17.5],
                 'ภาคใต้': [17.2, 17.6, 17.9, 17.4],
-                'ทั่วประเทศ': [17.4, 17.9, 18.1, 17.7]
+                'ทั่วประเทศ': [17.4, 18.1, 17.7, 18.5]
 
             },
             'ข้าวหอมมะลิ': {
@@ -205,14 +205,14 @@
                 'ภาคใต้': [42.5, 44.5, 44, 43.5],
                 'ภาคเหนือ': [41, 42, 42.5, 42],
                 'ภาคตะวันออกเฉียงเหนือ': [42, 43, 43.5, 43],
-                'ทั่วประเทศ': [42, 43, 43.4, 45, 42.5]
+                'ทั่วประเทศ': [42, 43, 43.4, 42.5]
             },
             'มันสำปะหลัง': {
                 'ภาคกลาง': [2.5, 2.7, 2.8, 2.9],
                 'ภาคใต้': [2.3, 2.5, 2.6, 2.7],
                 'ภาคเหนือ': [2.4, 2.6, 2.7, 2.8],
                 'ภาคตะวันออกเฉียงเหนือ': [2.5, 2.7, 2.8, 2.9],
-                'ทั่วประเทศ': [2.5, 2.7, 2.4, 2.3, 2.6]
+                'ทั่วประเทศ': [2.5, 2.7, 2.4, 2.3]
 
             },
             'อ้อย': {
@@ -220,7 +220,7 @@
                 'ภาคกลาง': [1050, 1100, 1080, 1110],
                 'ภาคเหนือ': [1030, 1080, 1060, 1090],
                 'ภาคตะวันออกเฉียงเหนือ': [1045, 1095, 1075, 1105],
-                'ทั่วประเทศ': [1020, 1030, 1085, 1100, 1105]
+                'ทั่วประเทศ': [1020, 1030, 1085, 1100]
 
             },
             'ปาล์มน้ำมัน': {
@@ -228,7 +228,7 @@
                 'ภาคกลาง': [4.1, 4.3, 4.4, 4.2],
                 'ภาคเหนือ': [3.9, 4.1, 4.2, 4.0],
                 'ภาคตะวันออกเฉียงเหนือ': [4.0, 4.2, 4.3, 4.1],
-                'ทั่วประเทศ': [4.2, 4.3, 4.4, 4.5, 4.6]
+                'ทั่วประเทศ': [4.2, 4.1, 4.4, 4.7, 3.9]
 
             }
         };
@@ -252,27 +252,38 @@
                 responsive: true,
                 plugins: {
                     legend: { position: 'top' },
-                    title: { display: true, text: 'แนวโน้มราคาพืชผลรายไตรมาส (จำลองข้อมูล)' }
+                    title: {
+                        display: true,
+                        text: 'แนวโน้มราคาพืชผลรายไตรมาส (จำลองข้อมูล)'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                return `${context.dataset.label}: ${context.parsed.y} บาทต่อกิโลกรัม`;
+                            }
+                        }
+                    }
                 }
             }
+
         });
 
         function predict() {
-            const crop = document.getElementById('cropInput').value.trim();
-            const region = document.getElementById('regionSelect').value;
+                const crop = document.getElementById('cropInput').value.trim();
+                const region = document.getElementById('regionSelect').value;
 
-            if (!cropPriceData[crop] || !cropPriceData[crop][region]) {
-                alert(`❌ กรุณาใส่ข้อมูลพืนที่ถูกต้องในการทำนาย "${crop}" ใน${region}`);
-                return;
+                if (!cropPriceData[crop] || !cropPriceData[crop][region]) {
+                    alert(`❌ กรุณาใส่ข้อมูลพืชที่ถูกต้องในการทำนาย "${crop}" ใน ${region}`);
+                    return;
+                }
+
+                const prices = cropPriceData[crop][region];
+
+                chart.data.datasets[0].label = `ราคาของ ${crop} ใน ${region} (บาทต่อกิโลกรัม)`;
+                chart.data.datasets[0].data = prices;
+                chart.update();
             }
 
-            const prices = cropPriceData[crop][region];
-
-            chart.data.datasets[0].label = `ราคา ${crop} (${region}บาท ต่อ กิโลกรัม)`;
-            chart.data.datasets[0].data = prices;
-            chart.update();
-
-        }
     </script>
 
 
