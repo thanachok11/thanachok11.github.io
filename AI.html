@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI วิเคราะห์ราคาพืชผล</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            background: #f5f5f5;
+        }
+
+        header {
+            background: #2e7d32;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .container {
+            padding: 1rem 2rem;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #2e7d32;
+            margin-bottom: 0.5rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        input[type="text"],
+        button {
+            padding: 0.5rem;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background: #2e7d32;
+            color: white;
+            cursor: pointer;
+            margin-left: 0.5rem;
+        }
+
+        .note {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        canvas {
+            max-width: 100%;
+        }
+        .chart-placeholder {
+      background: #eee;
+      height: 200px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #888;
+      font-style: italic;
+    }
+    input[type="text"], button {
+      padding: 0.5rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #2e7d32;
+      color: white;
+      cursor: pointer;
+      margin-left: 0.5rem;
+    }
+    .note {
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: 0.5rem;
+    }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>📊 ระบบ AI วิเคราะห์ราคาพืชผล</h1>
+        <p>ข้อมูลราคาพืชผล แนวโน้ม และคำแนะนำสำหรับเกษตรกร</p>
+    </header>
+
+    <div class="container">
+
+        <div class="card">
+            <h2>🔍 ทำนายราคาพืชผล</h2>
+            <label for="cropInput">กรอกชื่อพืชที่ต้องการทำนาย:</label><br><br>
+            <input type="text" id="cropInput" placeholder="เช่น ข้าวโพดเลี้ยงสัตว์, ถั่วเหลือง">
+            <button onclick="predict()">ทำนาย</button>
+            <div class="note">* พืชอย่าง “อ้อย” และ “มันสำปะหลัง” จะพยากรณ์แบบรายปี</div>
+        </div>
+
+        <div class="card">
+            <h2>📈 การพยากรณ์ราคา (ตัวอย่าง)</h2>
+            <canvas id="priceChart"></canvas>
+        </div>
+
+        <div class="card">
+            <h2>🌾 ราคาพืชผลล่าสุด</h2>
+            <div class="grid">
+                <div><strong>ข้าวหอมมะลิ:</strong> 14,000 บาท/ตัน</div>
+                <div><strong>มันสำปะหลัง:</strong> 2.8 บาท/กก. <span class="note">(พยากรณ์รายปี)</span></div>
+                <div><strong>อ้อย:</strong> 1,100 บาท/ตัน <span class="note">(พยากรณ์รายปี)</span></div>
+                <div><strong>ยางพารา:</strong> 45 บาท/กก.</div>
+                <div><strong>ข้าวโพดเลี้ยงสัตว์:</strong> 8.5 บาท/กก.</div>
+                <div><strong>ถั่วเหลือง:</strong> 18 บาท/กก.</div>
+                <div><strong>ปาล์มน้ำมัน:</strong> 4.2 บาท/กก.</div>
+            </div>
+        </div>
+        <div class="card">
+            <h2>🧭 คำแนะนำจาก AI</h2>
+            <ul>
+                <li>🌿 แนะนำให้ปลูก "ข้าวโพดเลี้ยงสัตว์" ในภาคเหนือช่วงฤดูฝน</li>
+                <li>⚠️ หลีกเลี่ยงการปลูก "อ้อย" ในภาคกลางปีนี้ (ราคามีแนวโน้มลดลง)</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>🗺️ แผนที่ความเสี่ยง</h2>
+            <div class="chart-placeholder">[แผนที่พื้นที่เสี่ยงและความเหมาะสม]</div>
+        </div>
+
+        <div class="card">
+            <h2>📤 ดาวน์โหลดรายงาน</h2>
+            <button>📄 ดาวน์โหลด PDF พื้นที่ของฉัน</button>
+        </div>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('priceChart').getContext('2d');
+
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.'],
+                datasets: [{
+                    label: 'ราคาข้าวโพดเลี้ยงสัตว์ (บาท/กก.)',
+                    data: [8.1, 8.3, 8.4, 8.6, 8.7, 8.5],
+                    borderColor: '#2e7d32',
+                    backgroundColor: 'rgba(46,125,50,0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    },
+                    title: {
+                        display: true,
+                        text: 'แนวโน้มราคาพืชผล (จำลองข้อมูล)'
+                    }
+                }
+            }
+        });
+
+        function predict() {
+            const crop = document.getElementById('cropInput').value;
+            alert(`กำลังทำนายราคาของ "${crop}"... (ตัวอย่างระบบเบื้องต้น)`);
+        }
+    </script>
+
+</body>
+
+</html>
